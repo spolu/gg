@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"./account"
 	"./oauth"
 )
 
@@ -17,12 +18,12 @@ func main() {
 	// gg -a stripe -request_url
 	// gg -a stripe -oauth_code xxx
 
-	var account string
+	var accountName string
 	const (
 		aDefault = "default"
 		aUsage   = "The account to use"
 	)
-	flag.StringVar(&account, "a", aDefault, aUsage+" (shorthand)")
+	flag.StringVar(&accountName, "a", aDefault, aUsage+" (shorthand)")
 
 	var oauthCode string
 	const (
@@ -34,7 +35,7 @@ func main() {
 	var authorizeURL bool
 	const (
 		auDefault = false
-		auUsage   = "The code to input after OAuth authorization"
+		auUsage   = "Dumps the authorization URL"
 	)
 	flag.BoolVar(&authorizeURL, "authorize_url", auDefault, auUsage)
 
@@ -49,6 +50,8 @@ func main() {
 		fmt.Printf("%s", u)
 		os.Exit(0)
 	}
+
+	account := account.NewAccount(accountName)
 
 	if oauthCode != "" {
 		oa := new(oauth.OAuth)
